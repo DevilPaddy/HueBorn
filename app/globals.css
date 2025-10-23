@@ -7,6 +7,8 @@
   --text-main-color: #0f0f10;
   --text-secondary-color: #6a7077;
   --text-teal: #005f60;
+  --play-txt: "Playfair Display", serif;
+  --inter-txt: "Inter", sans-serif;
 }
 
 html,
@@ -15,6 +17,7 @@ body {
   padding: 0;
   overscroll-behavior: none;
   box-sizing: border-box;
+  background: #ede8e2;
 }
 
 a,
@@ -23,14 +26,23 @@ button {
 }
 
 .logo {
-  font-family: "Playfair Display", serif;
+  font-family: var(--play-txt);
 }
 
 .nav-menu a {
-  font-family: "Inter", sans-serif;
+  font-family: var(--inter-txt);
   color: var(--text-secondary-color);
   transition: color .1s ease-in-out;
 
+}
+
+.nav {
+  background: #ede8e2;
+  border-bottom: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(2.5px);
+  -webkit-backdrop-filter: blur(2.5px);
+  border: 1px solid rgba(186, 182, 178, 0.3);
 }
 
 .nav-menu a:hover {
@@ -38,11 +50,11 @@ button {
 }
 
 .hero-text {
-  font-family: "Playfair Display", serif;
+  font-family: var(--play-txt);
 }
 
 .hero-btn {
-  font-family: "Inter", sans-serif;
+  font-family: var(--inter-txt);
   background: var(--bg-color);
   color: var(--text-teal);
   transition: all .2s ease-in-out;
@@ -61,12 +73,12 @@ button {
   color: var(--bg-color);
   font-size: 3.9vh;
   font-weight: 600;
-  font-family: "Inter", sans-serif;
+  font-family: var(--inter-txt);
 }
 
 .abv .footer-logo {
   font-size: 4vh;
-  font-family: "Playfair Display", serif;
+  font-family: var(--play-txt);
 }
 
 .abv a {
@@ -78,6 +90,64 @@ button {
   color: #005f60;
 }
 
+.title-txt {
+  font-size: 3vw;
+  font-weight: bold;
+  font-family: var(--play-txt);
+  color: var(--text-main-color);
+}
+
+.sub-txt {
+  font-size: 1.12vw;
+  font-family: var(--inter-txt);
+  color: var(--text-secondary-color);
+}
+
+.sub-link {
+  font-size: 1.12vw;
+  font-family: var(--inter-txt);
+  color: var(--text-secondary-color);
+}
+
+.sub-link:hover {
+  color: var(--text-teal);
+}
+
+.card-container {
+  margin-top: 3vw;
+  margin-bottom: 6vw;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-auto-rows: 400px;
+  gap: 2rem;
+}
+
+.card {
+  border-radius: 8px;
+  transition: all .19s ease-in-out;
+}
+
+.card-txt {
+  font-size: 3vw;
+  font-family: var(--play-txt);
+  font-weight: bold;
+}
+
+.card-link {
+  font-family: var(--play-txt);
+  color: var(--bg-color);
+  font-size: 1.2vw;
+  transition: all .19s ease-in-out;
+}
+
+.card:hover p {
+  color: var(--text-teal);
+}
+
+.card:hover {
+  scale: 101.8%;
+}
+
 @media only screen and (max-width: 768px) {
   .hero-btn {
     background: var(--text-teal);
@@ -87,5 +157,25 @@ button {
 
   .hero-btn:hover {
     border: 2px solid #005f60;
+  }
+
+  .card-txt {
+    font-size: 13vw;
+  }
+
+  .card-link {
+    font-size: 4.6vw;
+  }
+
+  .title-txt {
+    font-size: 10vw;
+  }
+
+  .sub-txt {
+    font-size: 4.4vw;
+  }
+
+  .sub-link {
+    font-size: 4.4vw;
   }
 }
