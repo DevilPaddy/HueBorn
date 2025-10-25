@@ -18,6 +18,7 @@ body {
   overscroll-behavior: none;
   box-sizing: border-box;
   background: #ede8e2;
+  min-height: 100%;
 }
 
 a,
@@ -125,6 +126,7 @@ button {
 .card {
   border-radius: 8px;
   transition: all .19s ease-in-out;
+  height:auto;
 }
 
 .card-txt {
@@ -148,6 +150,50 @@ button {
   scale: 101.8%;
 }
 
+.path-div{
+  background-color: var(--text-teal);
+}
+
+.sub-link-path {
+  font-size: 1.12vw;
+  font-family: var(--inter-txt);
+  color: var(--bg-color);
+  opacity: 0.6;
+}
+
+.sub-link-path:hover {
+  opacity: .8;
+}
+
+.title-txt-path {
+  font-size: 3vw;
+  font-weight: bold;
+  font-family: var(--play-txt);
+  color: var(--bg-color);
+}
+
+.sub-txt-path {
+  font-size: 1.12vw;
+  font-family: var(--inter-txt);
+  color: var(--bg-color);
+  opacity: 0.6;
+}
+.card-path-sec{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  border-radius: 12px;
+  padding: 4px 8px;
+  background-color: #88b0ae3f;
+  height: auto;
+}
+
+.card-title{
+  font-family: var(--play-txt);
+  text-align: center;
+}
+
 @media only screen and (max-width: 768px) {
   .hero-btn {
     background: var(--text-teal);
@@ -160,22 +206,36 @@ button {
   }
 
   .card-txt {
-    font-size: 13vw;
+    font-size: 6vh;
   }
 
   .card-link {
-    font-size: 4.6vw;
+    font-size: 2.6vh;
   }
 
   .title-txt {
-    font-size: 10vw;
+    font-size: 5vh;
   }
 
   .sub-txt {
-    font-size: 4.4vw;
+    font-size: 2.4vh;
   }
 
   .sub-link {
-    font-size: 4.4vw;
+    font-size: 2.4vh;
   }
+
+  .sub-link-path{
+    font-size: 2.4vh;
+  }
+
+  .title-txt-path{
+    font-size: 6vh;
+  }
+
+  .sub-txt-path{
+    font-size: 2.4vh;
+  }
+
+  
 }

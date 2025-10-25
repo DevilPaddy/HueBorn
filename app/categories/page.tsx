@@ -8,8 +8,8 @@ import Link from 'next/link'
 
 const page = () => {
     return (
-        <div>
-            <div className='fixed w-full top-0 left-0'>
+        <div className='min-h-screen'>
+            <div className='fixed w-full top-0 left-0 z-50'>
                 <Navbar />
             </div>
 
@@ -27,7 +27,7 @@ const page = () => {
                 {/* categories card */}
                 <div className="card-container  w-full h-auto">
                     <Link
-                        href='/'
+                        href='/lineneshirt'
                         className="card bg-[#868686]">
                         <div className='flex h-[87%] items-center justify-center'>
                             <h2 className='card-txt text-[#38393A]'>Linen Shirt</h2>
@@ -39,7 +39,7 @@ const page = () => {
                         </div>
                     </Link>
 
-                    <Link href='/' className="card bg-[#00393A]">
+                    <Link href='/poloshirt' className="card bg-[#00393A]">
                         <div className='flex h-[87%] items-center justify-center'>
                             <h2 className='card-txt text-[#949494]'>Polo Shirt</h2>
                         </div>
@@ -50,7 +50,7 @@ const page = () => {
                         </div>
                     </Link>
 
-                    <Link href='/' className="card bg-[#6B6B6B]">
+                    <Link href='/trousers' className="card bg-[#6B6B6B]">
                         <div className='flex h-[87%] items-center justify-center'>
                             <h2 className='card-txt text-[#38393A]'>Trousers</h2>
                         </div>
@@ -61,7 +61,7 @@ const page = () => {
                         </div>
                     </Link>
 
-                    <Link href='/' className="card bg-[#1F1F1F]">
+                    <Link href='/shoes' className="card bg-[#1F1F1F]">
                         <div className='flex h-[87%] items-center justify-center'>
                             <h2 className='card-txt text-[#949494]'>Shoes</h2>
                         </div>
