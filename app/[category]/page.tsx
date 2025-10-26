@@ -1,11 +1,10 @@
 'use client';
-import React, { use } from 'react';
+import React from 'react';
 import Link from 'next/link';
-import Navbar from '../../components/Navbar';
-import Footer from '../../components/Footer';
 import { IoIosArrowRoundBack } from "react-icons/io";
 import { IoMdAdd } from "react-icons/io";
 import { IconType } from 'react-icons';
+import { useParams } from 'next/navigation';
 
 type PathItem = {
   name: string;
@@ -17,8 +16,12 @@ type SubPathTypes = {
   [key: string]: PathItem[];
 };
 
-export default function CategoryPage({ params }: { params: { category: string } }) {
-  const { category } = use(params) as { category: string };
+export default function CategoryPage() {
+  const params = useParams();
+
+  const categoryParam = params.category;
+
+  const category = Array.isArray(categoryParam) ? categoryParam[0] : categoryParam;
 
   console.log("Selected Category:", category);
 
@@ -29,36 +32,33 @@ export default function CategoryPage({ params }: { params: { category: string } 
       { name: "The City Classic", url: "path3-linen", icon: IoMdAdd },
     ],
     poloshirt: [
-      { name: "Path 1: The Everyday Essential", url: "path1-polo", icon: IoMdAdd },
-      { name: "Path 2: The Weekend Vibe", url: "path2-polo", icon: IoMdAdd },
-      { name: "Path 3: The Luxe Comfort", url: "path3-polo", icon: IoMdAdd },
+      { name: "The Everyday Essential", url: "path1-polo", icon: IoMdAdd },
+      { name: "The Weekend Vibe", url: "path2-polo", icon: IoMdAdd },
+      { name: "The Luxe Comfort", url: "path3-polo", icon: IoMdAdd },
     ],
     trousers: [
-      { name: "Path 1: The Tailored Fit", url: "path1-trouser", icon: IoMdAdd },
-      { name: "Path 2: The Casual Ease", url: "path2-trouser", icon: IoMdAdd },
-      { name: "Path 3: The Workday Smart", url: "path3-trouser", icon: IoMdAdd },
+      { name: "The Tailored Fit", url: "path1-trouser", icon: IoMdAdd },
+      { name: "The Casual Ease", url: "path2-trouser", icon: IoMdAdd },
+      { name: "The Workday Smart", url: "path3-trouser", icon: IoMdAdd },
     ],
     shoes: [
-      { name: "Path 1: The Classic Oxford", url: "path1-shoe", icon: IoMdAdd },
-      { name: "Path 2: The Street Sneaker", url: "path2-shoe", icon: IoMdAdd },
-      { name: "Path 3: The Everyday Loafer", url: "path3-shoe", icon: IoMdAdd },
+      { name: "The Classic Oxford", url: "path1-shoe", icon: IoMdAdd },
+      { name: "The Street Sneaker", url: "path2-shoe", icon: IoMdAdd },
+      { name: "The Everyday Loafer", url: "path3-shoe", icon: IoMdAdd },
     ],
   };
 
-  const path = subPath[category] ?? [];
+  const path = category ? subPath[category] ?? [] : [];
 
   return (
-    <div className='path-div bg-[#005F60] min-h-screen'>
-      <div className='fixed w-full top-0 left-0 z-50'>
-        <Navbar />
-      </div>
+    <div className='path-div bg-[#005F60] min-h-screen mx-auto'>
 
-      <div className='w-full h-auto md:px-[3.8vw] md:py-[1.4vw] px-[3vh] py-[.2vh] mt-20 md:mt-16'>
+      <div className='w-full h-auto md:px-[3.8vw] md:py-[1.4vw] px-[3vh] py-[.2vh]'>
         <div className="path-txt flex flex-col items-center ">
           <Link href='/categories' className='sub-link-path flex items-center mt-4'>
-            <IoIosArrowRoundBack />Back to Home Page
+            <IoIosArrowRoundBack />Back to Categories Page
           </Link>
-          <h4 className='title-txt-path md:text-[3vw] font-bold leading-12 mt-1.5 mb-4 text-center'>
+          <h4 className='title-txt-path title-txt leading-12 text-center'>
             Curation: Your {category} Journey
           </h4>
           <p className='sub-txt-path text-center'>Select your path to curated excellence.</p>
@@ -72,13 +72,12 @@ export default function CategoryPage({ params }: { params: { category: string } 
                 <Icon color='#EDE8E2' size='32' />
               </div>
               <div className="card-title">
-                <h3 className='text-[#ede8e2] text-[5vh] md:text-[2.6vw] font-bold leading-12'>{name}</h3>
+                <h3 className='text-[#ede8e2] leading-11'>{name}</h3>
               </div>
-              <div className="card-btn">
+              <div className="card-btn-div">
                 <Link
-                  className='md:px-[4vw] md:py-[1vw] bg-[#EDE8E2] border-2 border-[#ede8e2] text-[#005F60] hover:bg-[#005F60]
-                  hover:text-[#ede8e2] text-center hover:border-[#005F60] md:text-[1.12vw] font-semibold duration-200 ease-in-out
-                  px-[6vw] py-[1.5vw] text-[2vh]'
+                  className='card-btn bg-[#EDE8E2] border-2 border-[#ede8e2] text-[#005F60] hover:bg-[#005F60]
+                  hover:text-[#ede8e2] text-center hover:border-[#005F60] font-medium duration-200 ease-in-out'
                   href={`/${category}/${url}`}
                 >
                   Explore The Picks
@@ -87,11 +86,6 @@ export default function CategoryPage({ params }: { params: { category: string } 
             </div>
           ))}
         </div>
-      </div>
-
-      {/* footer */}
-      <div className="footer">
-        <Footer />
       </div>
     </div>
   );

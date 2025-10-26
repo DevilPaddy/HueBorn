@@ -18,7 +18,6 @@ body {
   overscroll-behavior: none;
   box-sizing: border-box;
   background: #ede8e2;
-  min-height: 100%;
 }
 
 a,
@@ -26,19 +25,26 @@ button {
   cursor: pointer;
 }
 
+.container {
+  max-width: 1440px;
+}
+
 .logo {
   font-family: var(--play-txt);
+  font-size: clamp(2.2rem, 5vh + 1rem, 2.6rem);
 }
 
 .nav-menu a {
   font-family: var(--inter-txt);
   color: var(--text-secondary-color);
   transition: color .1s ease-in-out;
+  font-size: clamp(.8rem, 1vw + .5rem, 1.1rem);
 
 }
 
 .nav {
   background: #ede8e2;
+  padding: 0 3em;
   border-bottom: 16px;
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(2.5px);
@@ -52,6 +58,8 @@ button {
 
 .hero-text {
   font-family: var(--play-txt);
+  font-size: clamp(3rem, 7vw + 1rem, 7rem);
+  line-height: 1;
 }
 
 .hero-btn {
@@ -59,6 +67,8 @@ button {
   background: var(--bg-color);
   color: var(--text-teal);
   transition: all .2s ease-in-out;
+  font-size: clamp(1.2rem, 2vw + 1rem, 1.6rem);
+  padding: .4em 1em;
 }
 
 .hero-btn:hover {
@@ -72,13 +82,14 @@ button {
 
 .abv h6 {
   color: var(--bg-color);
-  font-size: 3.9vh;
+  font-size: clamp(1.2rem, 3vw + .2rem, 1.7rem);
   font-weight: 600;
   font-family: var(--inter-txt);
 }
 
 .abv .footer-logo {
-  font-size: 4vh;
+  font-size: clamp(1.4rem, 3vw + .2rem, 1.8rem);
+  font-weight: 600;
   font-family: var(--play-txt);
 }
 
@@ -92,20 +103,26 @@ button {
 }
 
 .title-txt {
-  font-size: 3vw;
+  font-size: clamp(1.2rem, 3vh + 1rem, 5rem);
+  margin-top: 0.5em;
+  margin-bottom: 0.6em;
   font-weight: bold;
   font-family: var(--play-txt);
+}
+
+.title-txt-category {
   color: var(--text-main-color);
 }
 
 .sub-txt {
-  font-size: 1.12vw;
+  font-size: clamp(.4rem, 1.2rem, 2rem);
   font-family: var(--inter-txt);
   color: var(--text-secondary-color);
 }
 
+
 .sub-link {
-  font-size: 1.12vw;
+  font-size: clamp(.4rem, 1.2rem, 2rem);
   font-family: var(--inter-txt);
   color: var(--text-secondary-color);
 }
@@ -126,11 +143,13 @@ button {
 .card {
   border-radius: 8px;
   transition: all .19s ease-in-out;
-  height:auto;
+  height: auto;
+  padding: 0.4em 0.4em;
+  min-height: 26rem;
 }
 
 .card-txt {
-  font-size: 3vw;
+  font-size: clamp(2rem, 3rem, 4rem);
   font-family: var(--play-txt);
   font-weight: bold;
 }
@@ -138,7 +157,7 @@ button {
 .card-link {
   font-family: var(--play-txt);
   color: var(--bg-color);
-  font-size: 1.2vw;
+  font-size: clamp(1rem, 1.2rem, 2rem);
   transition: all .19s ease-in-out;
 }
 
@@ -150,12 +169,12 @@ button {
   scale: 101.8%;
 }
 
-.path-div{
+.path-div {
   background-color: var(--text-teal);
 }
 
 .sub-link-path {
-  font-size: 1.12vw;
+  font-size: clamp(.4rem, 1.2rem, 2rem);
   font-family: var(--inter-txt);
   color: var(--bg-color);
   opacity: 0.6;
@@ -166,35 +185,45 @@ button {
 }
 
 .title-txt-path {
-  font-size: 3vw;
-  font-weight: bold;
-  font-family: var(--play-txt);
   color: var(--bg-color);
+  margin-top: 0.5em;
+  margin-bottom: 0.6em;
 }
 
 .sub-txt-path {
-  font-size: 1.12vw;
+  font-size: clamp(.4rem, 1.2rem, 2rem);
   font-family: var(--inter-txt);
   color: var(--bg-color);
   opacity: 0.6;
 }
-.card-path-sec{
+
+.card-path-sec {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
-  border-radius: 12px;
-  padding: 4px 8px;
+  border-radius: 8px;
+  padding: .4em .4em;
   background-color: #88b0ae3f;
-  height: auto;
+  min-height: 26rem;
 }
 
-.card-title{
+.card-title {
+  font-size: clamp(1.8rem, 2.6rem, 4rem);
   font-family: var(--play-txt);
   text-align: center;
+  font-weight: 600;
 }
 
+.card-btn{
+  padding: .4em .8em;
+  font-weight: 600;
+}
 @media only screen and (max-width: 768px) {
+  .nav {
+    padding: 0 1em;
+  }
+
   .hero-btn {
     background: var(--text-teal);
     color: var(--bg-color);
@@ -205,37 +234,4 @@ button {
     border: 2px solid #005f60;
   }
 
-  .card-txt {
-    font-size: 6vh;
-  }
-
-  .card-link {
-    font-size: 2.6vh;
-  }
-
-  .title-txt {
-    font-size: 5vh;
-  }
-
-  .sub-txt {
-    font-size: 2.4vh;
-  }
-
-  .sub-link {
-    font-size: 2.4vh;
-  }
-
-  .sub-link-path{
-    font-size: 2.4vh;
-  }
-
-  .title-txt-path{
-    font-size: 6vh;
-  }
-
-  .sub-txt-path{
-    font-size: 2.4vh;
-  }
-
-  
 }

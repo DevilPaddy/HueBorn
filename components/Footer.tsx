@@ -26,7 +26,7 @@ const Footer = () => {
                 <div className='flex flex-col'>
                     <h6>Stay Connected</h6>
                     <p className='text-[#949494] font-semibold'>Join our journal for insights on style and curation.</p>
-                    <div className="email-form mt-4 flex items-center h-[56px]">
+                    <div className="email-form mt-4 flex items-center h-14">
                         <input
                             className='px-3 h-full flex-1 bg-[#1e1e1e] rounded-l-sm text-[#949494] outline-none'
                             type="text"
@@ -35,7 +35,7 @@ const Footer = () => {
                         <button
                             className='px-4 h-full bg-[#005f60] rounded-r-sm text-[#949494]'
                         >
-                            <IoIosArrowRoundForward size='6vh' />
+                            <IoIosArrowRoundForward style={{fontSize: "clamp(2rem, 3rem, 3rem)"}} />
                         </button>
                     </div>
                 </div>
@@ -44,13 +44,13 @@ const Footer = () => {
                     <h6>Follow Us</h6>
                     <div className='text-[#949494] flex items-center justify-start md:justify-between gap-3'>
                         <Link href='https://www.instagram.com'>
-                            <FaInstagram size='6vh' />
+                            <FaInstagram style={{fontSize: "clamp(1.2rem, 2rem, 3rem)"}} />
                         </Link>
                         <Link href='https://www.instagram.com'>
-                            <FiFacebook size='6vh' />
+                            <FiFacebook style={{fontSize: "clamp(1.2rem, 2rem, 3rem)"}} />
                         </Link>
                         <Link href='https://www.instagram.com'>
-                            <SlSocialTwitter size='6vh' />
+                            <SlSocialTwitter style={{fontSize: "clamp(1.2rem, 2rem, 3rem)"}} />
                         </Link>
                     </div>
                 </div>
