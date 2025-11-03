@@ -1,37 +1,66 @@
-'use client'
-import React from 'react'
-import Link from "next/link";
+"use client";
 
-const page = () => {
+import { useEffect } from 'react';
+import HeroSection from '../components/Herosection';
+import Philosophysection from '../components/Philosophysection';
+import CategorySection from '../components/Categorypage';
 
+export default function Home() {
+
+  useEffect(() => {
+    const handleClick = (e: Event) => {
+      e.preventDefault();
+      const target = e.currentTarget as HTMLAnchorElement;
+      const href = target.getAttribute('href');
+      if (!href) return;
+
+      const targetElement = document.querySelector(href);
+      if (targetElement) {
+        targetElement.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }
+    };
+
+    const anchors = document.querySelectorAll('a[href^="#"]');
+    anchors.forEach(anchor => {
+      anchor.addEventListener('click', handleClick);
+    });
+
+    const callback: IntersectionObserverCallback = (entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(callback);
+
+    const itemsToObserve = document.querySelectorAll('.collection-item');
+    itemsToObserve.forEach(item => {
+      observer.observe(item);
+    });
+
+    return () => {
+      anchors.forEach(anchor => {
+        anchor.removeEventListener('click', handleClick);
+      });
+      observer.disconnect();
+    };
+
+  }, []);
 
   return (
-    <div>
-      {/* hero section */}
-      <div className='conatiner md:relative h-auto md:h-screen w-full md:px-0 md:py-0 px-[1.3vh] py-[.2vh] mb-10 md:mb-0'>
-        <img
-          className='hero-img w-full md:h-full h-[46vh] md:z-[-2] object-cover object-right-top md:object-top
-          rounded-[33px] md:rounded-none'
-          src="/hero.jpg" alt="" />
+    <>
+      <HeroSection />
 
-        <div className="over md:absolute md:top-0 md:left-0 w-full 
-          md:h-full z-10 md:bg-[#11111170] 
-          md:px-[3.8vw] md:py-[.2vw] px-0 py-0">
-
-          <div className="hero-content w-full md:w-[60%] h-auto md:h-full flex flex-col  md:justify-center items-stretch md:items-start mt-4 md:mt-0">
-
-            <h6 className='hero-text font-bold text-[#0f0f10] md:text-[#ede8e2]'
-            >Dress for the Life You Desire.
-            </h6>
-
-            <Link href='/categories'
-              className='hero-btn text-center md:w-fit mt-[4vh] md:mt-[3.6vw] font-medium'
-            >Explore Collections</Link>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
+      <div className="break"></div>
+      <Philosophysection />
+      <div className="break"></div>
+      <CategorySection />
+    </>
+  );
 }
-
-export default page

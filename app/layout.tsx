@@ -1,11 +1,27 @@
 import "./globals.css";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import type { Metadata } from "next";
 
-export const metadata = {
-  title: "My Website",
-  description: "Built with Next.js",
+export const metadata: Metadata = {
+  title: {
+    default: "HueBorn — Curated Men's Fashion",
+    template: "%s | HueBorn",
+  },
+  description:
+    "HueBorn curates the best men's fashion — linen shirts, polos, shoes, and trousers from trusted brands.",
+  openGraph: {
+    siteName: "HueBorn",
+    type: "website",
+    locale: "en_IN",
+    url: "https://hueborn.com",
+  },
+  twitter: {
+    card: "summary_large_image",
+    site: "@HueBornOfficial",
+  },
 };
+
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (

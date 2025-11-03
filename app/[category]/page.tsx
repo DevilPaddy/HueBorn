@@ -55,9 +55,6 @@ export default function CategoryPage() {
 
       <div className='w-full h-auto md:px-[3.8vw] md:py-[1.4vw] px-[3vh] py-[.2vh]'>
         <div className="path-txt flex flex-col items-center ">
-          <Link href='/categories' className='sub-link-path flex items-center mt-4'>
-            <IoIosArrowRoundBack />Back to Categories Page
-          </Link>
           <h4 className='title-txt-path title-txt leading-12 text-center'>
             Curation: Your {category} Journey
           </h4>

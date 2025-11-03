@@ -7,15 +7,11 @@ import Link from 'next/link'
 
 const page = () => {
     return (
-        <div className='container mt-2 mb-2 mx-auto'>
+        <div id='categories' className='container scroll-mt-10 mt-2 mb-2 mx-auto'>
+
             <div className="category-section bg-[#ede8e2] flex  flex-col justify-center 
             items-center w-full md:px-[3.8vw] md:py-[1.4vw] px-[3vh] py-[.2vh]">
                 <div className="flex flex-col items-center justify-center">
-                    <Link
-                        className='sub-link flex items-center'
-                        href='/'
-                    ><IoIosArrowRoundBack />Back to Home Page
-                    </Link>
                     <h4 className='title-txt title-txt-category'>Shop by Category</h4>
                     <p className='sub-txt'>Timeless Style Awaits</p>
                 </div>
