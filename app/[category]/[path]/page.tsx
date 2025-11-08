@@ -14,9 +14,6 @@ const page = () => {
 
       <div className="pt-20">
         <div className="path-txt flex flex-col items-center mb-6">
-          <Link href='/categories' className='sub-link flex items-center mt-4'>
-            <IoIosArrowRoundBack />Back to Categories Page
-          </Link>
           <h4 className='title-txt md:text-[3vw] font-bold leading-12 mt-1.5 mb-4 text-center'>
             Curation: Your Journey
           </h4>

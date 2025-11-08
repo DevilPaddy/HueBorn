@@ -1,29 +1,24 @@
-'use client';
-import React from 'react';
-import Link from 'next/link';
-import { IoIosArrowRoundBack } from "react-icons/io";
-import { IoMdAdd } from "react-icons/io";
-import { IconType } from 'react-icons';
-import { useParams } from 'next/navigation';
+'use client'
+import React from 'react'
+import Link from 'next/link'
+import { IoMdAdd } from "react-icons/io"
+import { IconType } from 'react-icons'
+import { useParams, useRouter } from 'next/navigation'
 
 type PathItem = {
-  name: string;
-  url: string;
-  icon: IconType;
-};
+  name: string
+  url: string
+  icon: IconType
+}
 
-type SubPathTypes = {
-  [key: string]: PathItem[];
-};
+type SubPathTypes = Record<string, PathItem[]>
 
 export default function CategoryPage() {
-  const params = useParams();
+  const params = useParams()
+  const router = useRouter()
 
-  const categoryParam = params.category;
-
-  const category = Array.isArray(categoryParam) ? categoryParam[0] : categoryParam;
-
-  console.log("Selected Category:", category);
+  const categoryParam = params.category
+  const category = Array.isArray(categoryParam) ? categoryParam[0] : categoryParam
 
   const subPath: SubPathTypes = {
     lineneshirt: [
@@ -46,15 +41,20 @@ export default function CategoryPage() {
       { name: "The Street Sneaker", url: "path2-shoe", icon: IoMdAdd },
       { name: "The Everyday Loafer", url: "path3-shoe", icon: IoMdAdd },
     ],
-  };
+  }
 
-  const path = category ? subPath[category] ?? [] : [];
+  // ✅ Safe check before indexing
+  if (!category || !(category in subPath)) {
+    router.push('/404')
+    return null
+  }
+
+  const path = subPath[category]
 
   return (
     <div className='path-div bg-[#005F60] min-h-screen mx-auto'>
-
       <div className='w-full h-auto md:px-[3.8vw] md:py-[1.4vw] px-[3vh] py-[.2vh]'>
-        <div className="path-txt flex flex-col items-center ">
+        <div className="path-txt flex flex-col items-center">
           <h4 className='title-txt-path title-txt leading-12 text-center'>
             Curation: Your {category} Journey
           </h4>
@@ -64,8 +64,7 @@ export default function CategoryPage() {
         <div className="card-container">
           {path.map(({ name, url, icon: Icon }) => (
             <div key={url} className="card-path-sec">
-              <div className="card-icon p-3 rounded-full border-2 border-[#EDE8E2] bg-[#005F60]
-              flex items-center justify-center">
+              <div className="card-icon p-3 rounded-full border-2 border-[#EDE8E2] bg-[#005F60] flex items-center justify-center">
                 <Icon color='#EDE8E2' size='32' />
               </div>
               <div className="card-title">
@@ -85,5 +84,5 @@ export default function CategoryPage() {
         </div>
       </div>
     </div>
-  );
+  )
 }
