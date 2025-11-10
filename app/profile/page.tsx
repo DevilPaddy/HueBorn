@@ -10,18 +10,38 @@ const ProfilePage = () => {
   const { data: session, status } = useSession()
   const router = useRouter()
   const [wishlist, setWishlist] = useState<any[]>([])
+  const [isAdmin, setIsAdmin] = useState(false)
 
   useEffect(() => {
     if (status === 'unauthenticated') router.push('/login')
+
     if (status === 'authenticated') {
-      const fetchWishlist = async () => {
-        const res = await fetch('/api/profile/wishlist')
-        if (res.ok) {
-          const data = await res.json()
-          setWishlist(data.wishlist || [])
+      const fetchData = async () => {
+        try {
+          // ✅ 1. Fetch wishlist safely
+          const resWishlist = await fetch('/api/profile/wishlist')
+          if (resWishlist.ok) {
+            const data = await resWishlist.json().catch(() => ({}))
+            setWishlist(data.wishlist || [])
+          } else {
+            console.warn('Wishlist fetch failed:', resWishlist.status)
+          }
+
+          // ✅ 2. Fetch admin status safely
+          const resAdmin = await fetch('/api/isadmin')
+          if (resAdmin.ok) {
+            const data = await resAdmin.json().catch(() => ({}))
+            setIsAdmin(data.isAdmin)
+          } else {
+            // Non-200 status still okay — user might not be admin
+            setIsAdmin(false)
+          }
+        } catch (error) {
+          console.error('Error fetching profile data:', error)
         }
       }
-      fetchWishlist()
+
+      fetchData()
     }
   }, [status, router])
 
@@ -31,14 +51,25 @@ const ProfilePage = () => {
   if (!session) return null
 
   return (
-    <div className="min-h-screen bg-[#f7f7f7] flex flex-col items-center p-6">
+    <div className="min-h-screen flex flex-col items-center p-6">
       <div className="bg-white p-6 rounded-xl shadow-md w-full max-w-md text-center">
         <FaUserCircle size={80} className="mx-auto text-gray-500 mb-4" />
         <h2 className="text-xl font-semibold">{session.user?.name}</h2>
         <p className="text-gray-500 mb-4">{session.user?.email}</p>
+
+        {/* ✅ Admin Button */}
+        {isAdmin && (
+          <Link
+            href="/admin"
+            className="inline-block bg-black text-white px-4 py-2 rounded-md mt-2 hover:bg-blue-700 transition w-full"
+          >
+            Manage Products
+          </Link>
+        )}
+
         <button
           onClick={() => signOut()}
-          className="bg-red-500 text-white px-4 py-2 rounded-md mt-2 hover:bg-red-600 transition"
+          className="bg-red-500 text-white px-4 py-2 rounded-md mt-2 hover:bg-red-600 transition block w-full"
         >
           Logout
         </button>
