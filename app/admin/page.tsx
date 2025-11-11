@@ -1,321 +1,652 @@
 'use client';
-
-import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
 import React, { useState, useEffect } from 'react';
 
-// --- Types ---
-interface IProduct {
-  _id: string;
-  name: string;
-  brand: string;
-  category: string;
-  url: string;
-}
-
-type ProductFormData = Omit<IProduct, '_id'>;
-
-// --- SVG Icon Components ---
-const PlusIcon = () => (
-  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+// --- Icon Components ---
+// Using inline SVGs to avoid installing lucide-react
+const EditIcon = ({ className }: { className?: string }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
+    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
   </svg>
 );
 
-const EditIcon = () => (
-  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+const Trash2Icon = ({ className }: { className?: string }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
+    <path d="M3 6h18" />
+    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+    <path d="M10 11v6" />
+    <path d="M14 11v6" />
   </svg>
 );
 
-const DeleteIcon = () => (
-  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+const XIcon = ({ className }: { className?: string }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
+    <line x1="18" y1="6" x2="6" y2="18" />
+    <line x1="6" y1="6" x2="18" y2="18" />
   </svg>
 );
 
-const CloseIcon = () => (
-  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+const Loader2Icon = ({ className }: { className?: string }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
+    <path d="M21 12a9 9 0 1 1-6.219-8.56" />
   </svg>
 );
 
-const LoadingSpinner = () => (
-  <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-black" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-  </svg>
-);
-
-// --- Product Modal Component ---
-interface ProductModalProps {
-  product: IProduct | null;
-  onClose: () => void;
-  onSave: (productData: ProductFormData | IProduct) => void;
-  isSaving: boolean;
-}
-
-const ProductModal: React.FC<ProductModalProps> = ({ product, onClose, onSave, isSaving }) => {
-  const [formData, setFormData] = useState(
-    product || { name: '', brand: '', category: '', url: '' }
-  );
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onSave(formData);
-  };
-
-  return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 z-40 flex items-center justify-center p-4">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg">
-        <div className="flex justify-between items-center p-6 border-b">
-          <h3 className="text-2xl font-semibold">{product ? 'Edit Product' : 'Add New Product'}</h3>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600" disabled={isSaving}>
-            <CloseIcon />
-          </button>
-        </div>
-        <form onSubmit={handleSubmit}>
-          <div className="p-6 space-y-4">
-            {['name', 'brand', 'category', 'url'].map((field) => (
-              <div key={field}>
-                <label htmlFor={field} className="block text-sm font-medium text-gray-700">
-                  {field === 'url' ? 'Product URL (Cuelink)' : field.charAt(0).toUpperCase() + field.slice(1)}
-                </label>
-                <input
-                  type={field === 'url' ? 'url' : 'text'}
-                  name={field}
-                  id={field}
-                  value={(formData as any)[field]}
-                  onChange={handleChange}
-                  required
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black sm:text-sm"
-                />
-              </div>
-            ))}
-          </div>
-          <div className="bg-gray-50 p-6 flex justify-end space-x-3 rounded-b-lg">
-            <button
-              type="button"
-              onClick={onClose}
-              disabled={isSaving}
-              className="bg-white py-2 px-4 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              disabled={isSaving}
-              className="bg-black py-2 px-4 rounded-md text-sm font-medium text-white hover:bg-gray-800 flex items-center justify-center"
-            >
-              {isSaving ? <LoadingSpinner /> : 'Save Product'}
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-  );
-};
-
-// --- Products Table Component ---
-interface ProductsManagementProps {
-  products: IProduct[];
-  onEdit: (product: IProduct) => void;
-  onDelete: (id: string) => void;
-  onAdd: () => void;
-}
-
-const ProductsManagement: React.FC<ProductsManagementProps> = ({ products, onEdit, onDelete, onAdd }) => (
-  <>
-    <div className="flex justify-between items-center mb-6">
-      <h2 className="text-2xl font-bold">Manage Products</h2>
-      <button
-        onClick={onAdd}
-        className="flex items-center space-x-2 bg-black text-white px-4 py-2 rounded-lg font-medium hover:bg-gray-800 transition-all"
-      >
-        <PlusIcon />
-        <span>Add New Product</span>
-      </button>
-    </div>
-
-    <div className="bg-white rounded-lg shadow-md overflow-scroll">
-      <table className="w-full min-w-full divide-y divide-gray-200">
-        <thead className="bg-gray-50">
-          <tr>
-            {['Name', 'Brand', 'Category', 'URL', 'Actions'].map((header) => (
-              <th key={header} className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                {header}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody className="bg-white divide-y divide-gray-200">
-          {products.map((product) => (
-            <tr key={product._id}>
-              <td className="px-6 py-4 text-sm font-medium text-gray-900">{product.name}</td>
-              <td className="px-6 py-4 text-sm text-gray-500">{product.brand}</td>
-              <td className="px-6 py-4 text-sm text-gray-500">{product.category}</td>
-              <td className="px-6 py-4 text-sm text-blue-600">
-                <a href={product.url} target="_blank" rel="noopener noreferrer" className="hover:underline">
-                  {product.url.length > 30 ? `${product.url.substring(0, 30)}...` : product.url}
-                </a>
-              </td>
-              <td className="px-6 py-4 text-sm text-right space-x-2">
-                <button onClick={() => onEdit(product)} className="text-blue-600 hover:text-blue-800 p-1">
-                  <EditIcon />
-                </button>
-                <button onClick={() => onDelete(product._id)} className="text-red-600 hover:text-red-800 p-1">
-                  <DeleteIcon />
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  </>
-);
-
-// --- Main Admin Page Component ---
+// --- Main Component ---
 export default function AdminPage() {
-  const [products, setProducts] = useState<IProduct[]>([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingProduct, setEditingProduct] = useState<IProduct | null>(null);
-  const [isSaving, setIsSaving] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [products, setProducts] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [isFetching, setIsFetching] = useState(true);
+  const [notification, setNotification] = useState<{
+    message: string;
+    type: 'success' | 'error';
+  } | null>(null);
 
-  const { data: session, status } = useSession();
-  const router = useRouter();
+  // State for the "Add Product" form
+  const [form, setForm] = useState({
+    name: '',
+    description: '',
+    category: '',
+    path: '',
+    url: '',
+    image: null as File | null,
+  });
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
 
-  // --- Fetch Products ---
+  // State for the "Edit Product" modal
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [currentProduct, setCurrentProduct] = useState<any>(null);
+  const [editForm, setEditForm] = useState({
+    name: '',
+    description: '',
+    category: '',
+    path: '',
+    url: '',
+    image: null as File | null,
+  });
+  const [editImagePreview, setEditImagePreview] = useState<string | null>(null);
+
+  // State for the "Delete Product" modal
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [productToDelete, setProductToDelete] = useState<any>(null);
+
+  const categories = ['lineneshirt', 'poloshirt', 'trousers', 'shoes'];
+  const paths = ['path1', 'path2', 'path3'];
+
+  // --- Data Fetching ---
   const fetchProducts = async () => {
+    setIsFetching(true);
     try {
-      const res = await fetch('/api/product/');
+      const res = await fetch('/api/product');
       const data = await res.json();
-      if (data.success) setProducts(data.data);
+      if (data.success) {
+        setProducts(data.data);
+      } else {
+        showNotification(data.error || 'Failed to fetch products.', 'error');
+      }
     } catch (error) {
-      console.error('Failed to fetch products:', error);
-    } finally {
-      setIsLoading(false);
+      showNotification('Server error while fetching products.', 'error');
+    }
+    setIsFetching(false);
+  };
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  // --- Utility Functions ---
+  const showNotification = (message: string, type: 'success' | 'error') => {
+    setNotification({ message, type });
+    setTimeout(() => {
+      setNotification(null);
+    }, 3000);
+  };
+
+  const clearForm = () => {
+    setForm({
+      name: '',
+      description: '',
+      category: '',
+      path: '',
+      url: '',
+      image: null,
+    });
+    setImagePreview(null);
+  };
+
+  // --- "Add Product" Handlers ---
+  const handleFormChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null;
+    setForm((prev) => ({ ...prev, image: file }));
+    if (file) {
+      setImagePreview(URL.createObjectURL(file));
+    } else {
+      setImagePreview(null);
     }
   };
 
-  // --- Security Check ---
-  useEffect(() => {
-    if (status === 'loading') return;
-
-    if (status === 'unauthenticated') {
-      router.push('/');
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!form.image) {
+      showNotification('Image is required.', 'error');
       return;
     }
+    setLoading(true);
 
-    if (status === 'authenticated') {
-      fetch('/api/isadmin')
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.isAdmin) {
-            setIsAdmin(true);
-            fetchProducts();
-          } else {
-            router.push('/');
-          }
-        })
-        .catch(() => router.push('/'));
-    }
-  }, [status, router]);
-
-  // --- Modal Handlers ---
-  const handleOpenModal = () => {
-    setEditingProduct(null);
-    setIsModalOpen(true);
-  };
-
-  const handleEditProduct = (product: IProduct) => {
-    setEditingProduct(product);
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setEditingProduct(null);
-  };
-
-  // --- CRUD Handlers ---
-  const handleSaveProduct = async (productData: ProductFormData | IProduct) => {
-    setIsSaving(true);
     try {
-      let res;
-      if ('_id' in productData) {
-        res = await fetch(`/api/product/${productData._id}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(productData),
-        });
-      } else {
-        res = await fetch('/api/product/', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(productData),
-        });
-      }
+      const formData = new FormData();
+      formData.append('name', form.name);
+      formData.append('description', form.description);
+      formData.append('category', form.category);
+      formData.append('path', form.path);
+      formData.append('url', form.url);
+      formData.append('file', form.image);
 
-      if (res.ok) {
-        fetchProducts();
-        handleCloseModal();
+      const res = await fetch('/api/product', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await res.json();
+      if (res.ok && data.success) {
+        showNotification('Product added successfully!', 'success');
+        clearForm();
+        fetchProducts(); // Refresh the list
       } else {
-        console.error('Failed to save product');
+        showNotification(data.error || 'Upload failed.', 'error');
       }
     } catch (error) {
-      console.error('Error saving product:', error);
-    } finally {
-      setIsSaving(false);
+      console.error(error);
+      showNotification('Server error.', 'error');
+    }
+
+    setLoading(false);
+  };
+
+  // --- "Edit Product" Handlers ---
+  const openEditModal = (product: any) => {
+    setCurrentProduct(product);
+    setEditForm({
+      name: product.name,
+      description: product.description,
+      category: product.category,
+      path: product.path,
+      url: product.url,
+      image: null, // Reset image field
+    });
+    setEditImagePreview(product.image); // Show existing image
+    setIsEditModalOpen(true);
+  };
+
+  const handleEditFormChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
+    const { name, value } = e.target;
+    setEditForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleEditFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null;
+    setEditForm((prev) => ({ ...prev, image: file }));
+    if (file) {
+      setEditImagePreview(URL.createObjectURL(file));
+    } else {
+      setEditImagePreview(currentProduct?.image || null); // Revert to original if cancelled
     }
   };
 
-  const handleDeleteProduct = async (id: string) => {
+  const handleUpdate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
     try {
-      const res = await fetch(`/api/product/${id}`, { method: 'DELETE' });
-      if (res.ok) fetchProducts();
+      const formData = new FormData();
+      // Only append fields that have changed
+      if (editForm.name !== currentProduct.name)
+        formData.append('name', editForm.name);
+      if (editForm.description !== currentProduct.description)
+        formData.append('description', editForm.description);
+      if (editForm.category !== currentProduct.category)
+        formData.append('category', editForm.category);
+      if (editForm.path !== currentProduct.path)
+        formData.append('path', editForm.path);
+      if (editForm.url !== currentProduct.url)
+        formData.append('url', editForm.url);
+      if (editForm.image)
+        formData.append('file', editForm.image);
+
+      // Check if any data is being sent
+      if (Array.from(formData.entries()).length === 0) {
+        showNotification('No changes detected.', 'success');
+        setIsEditModalOpen(false);
+        setLoading(false);
+        return;
+      }
+
+      const res = await fetch(`/api/product/${currentProduct._id}`, {
+        method: 'PUT',
+        body: formData,
+      });
+
+      const data = await res.json();
+      if (res.ok && data.success) {
+        showNotification('Product updated successfully!', 'success');
+        setIsEditModalOpen(false);
+        fetchProducts(); // Refresh the list
+      } else {
+        showNotification(data.error || 'Update failed.', 'error');
+      }
     } catch (error) {
-      console.error('Error deleting product:', error);
+      console.error(error);
+      showNotification('Server error.', 'error');
     }
+
+    setLoading(false);
   };
 
-  // --- Render ---
-  if (isLoading || !isAdmin) {
-    return (
-      <div className="min-h-screen flex items-center justify-center text-center">
-        <div className="flex flex-col items-center">
-          <LoadingSpinner />
-          <p className="mt-2 text-lg">Checking credentials...</p>
-        </div>
-      </div>
-    );
-  }
+  // --- "Delete Product" Handlers ---
+  const openDeleteModal = (product: any) => {
+    setProductToDelete(product);
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleDelete = async () => {
+    if (!productToDelete) return;
+    setLoading(true);
+
+    try {
+      const res = await fetch(`/api/product/${productToDelete._id}`, {
+        method: 'DELETE',
+      });
+
+      const data = await res.json();
+      if (res.ok && data.success) {
+        showNotification('Product deleted successfully!', 'success');
+        setIsDeleteModalOpen(false);
+        setProductToDelete(null);
+        fetchProducts(); // Refresh the list
+      } else {
+        showNotification(data.error || 'Delete failed.', 'error');
+      }
+    } catch (error) {
+      console.error(error);
+      showNotification('Server error.', 'error');
+    }
+
+    setLoading(false);
+  };
 
   return (
-    <div className="min-h-screen font-inter p-6 md:p-10">
-      <main>
-        <ProductsManagement
-          products={products}
-          onAdd={handleOpenModal}
-          onEdit={handleEditProduct}
-          onDelete={handleDeleteProduct}
-        />
-      </main>
+    <div className="min-h-screen bg-gray-100 p-4 md:p-8 relative">
+      {/* --- Notification Bar --- */}
+      {notification && (
+        <div
+          className={`fixed top-5 left-1/2 -translate-x-1/2 z-50 rounded-md p-4 text-white ${
+            notification.type === 'success' ? 'bg-green-600' : 'bg-red-600'
+          }`}
+        >
+          {notification.message}
+        </div>
+      )}
 
-      {isModalOpen && (
-        <ProductModal
-          product={editingProduct}
-          onClose={handleCloseModal}
-          onSave={handleSaveProduct}
-          isSaving={isSaving}
-        />
+      {/* --- Add Product Form --- */}
+      <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-6 md:p-8 mb-8">
+        <h2 className="text-2xl font-semibold mb-6 text-center">
+          🛍️ Add New Product
+        </h2>
+        <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <input
+            type="text"
+            name="name"
+            placeholder="Product Name"
+            className="border p-3 rounded-lg w-full"
+            value={form.name}
+            onChange={handleFormChange}
+            required
+          />
+          <input
+            type="text"
+            name="url"
+            placeholder="Product URL"
+            className="border p-3 rounded-lg w-full"
+            value={form.url}
+            onChange={handleFormChange}
+            required
+          />
+          <textarea
+            name="description"
+            placeholder="Product Description"
+            className="border p-3 rounded-lg w-full md:col-span-2"
+            value={form.description}
+            onChange={handleFormChange}
+            required
+            rows={3}
+          />
+          <select
+            name="category"
+            className="border p-3 rounded-lg w-full"
+            value={form.category}
+            onChange={handleFormChange}
+            required
+          >
+            <option value="">Select Category</option>
+            {categories.map((cat) => (
+              <option key={cat} value={cat}>
+                {cat}
+              </option>
+            ))}
+          </select>
+          <select
+            name="path"
+            className="border p-3 rounded-lg w-full"
+            value={form.path}
+            onChange={handleFormChange}
+            required
+          >
+            <option value="">Select Path</option>
+            {paths.map((p) => (
+              <option key={p} value={p}>
+                {p}
+              </option>
+            ))}
+          </select>
+          <div className="md:col-span-2 border p-3 rounded-lg">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Product Image
+            </label>
+            <input
+              type="file"
+              accept="image/*"
+              className="block w-full text-sm text-gray-500
+                file:mr-4 file:py-2 file:px-4
+                file:rounded-full file:border-0
+                file:text-sm file:font-semibold
+                file:bg-[#005f60] file:text-white
+                hover:file:bg-[#004c4d]"
+              onChange={handleFileChange}
+              required
+            />
+          </div>
+          {imagePreview && (
+            <div className="md:col-span-2 flex justify-center">
+              <img
+                src={imagePreview}
+                alt="Preview"
+                className="w-32 h-32 object-cover rounded-md border"
+              />
+            </div>
+          )}
+          <button
+            type="submit"
+            className="md:col-span-2 bg-[#005F60] text-white py-3 rounded-lg hover:bg-[#004c4d] transition duration-200 flex items-center justify-center disabled:opacity-50"
+            disabled={loading}
+          >
+            {loading ? (
+              <Loader2Icon className="w-5 h-5 animate-spin" />
+            ) : (
+              'Add Product'
+            )}
+          </button>
+        </form>
+      </div>
+
+      {/* --- Product List Table --- */}
+      <div className="max-w-6xl mx-auto bg-white rounded-lg shadow-md p-6 md:p-8">
+        <h3 className="text-2xl font-semibold mb-6 text-center">🧾 Product List</h3>
+        {isFetching ? (
+          <div className="flex justify-center items-center h-40">
+            <Loader2Icon className="w-8 h-8 animate-spin text-[#005F60]" />
+          </div>
+        ) : products.length === 0 ? (
+          <p className="text-center text-gray-500">No products added yet.</p>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Image</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Path</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {products.map((p) => (
+                  <tr key={p._id}>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <img src={p.image} alt={p.name} className="w-12 h-12 rounded-md object-cover" />
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm font-medium text-gray-900">{p.name}</div>
+                      <div className="text-sm text-gray-500 truncate max-w-xs">{p.description}</div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                        {p.category}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{p.path}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                      <a href={p.url} target="_blank" rel="noopener noreferrer" className="text-[#005F60] hover:text-[#004c4d] mr-4">
+                        View
+                      </a>
+                      <button onClick={() => openEditModal(p)} className="text-blue-600 hover:text-blue-900 mr-4">
+                        <EditIcon className="w-5 h-5" />
+                      </button>
+                      <button onClick={() => openDeleteModal(p)} className="text-red-600 hover:text-red-900">
+                        <Trash2Icon className="w-5 h-5" />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+
+      {/* --- Edit Product Modal --- */}
+      {isEditModalOpen && (
+        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white rounded-lg shadow-xl p-6 md:p-8 w-full max-w-3xl m-4">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-semibold">Edit Product</h3>
+              <button onClick={() => setIsEditModalOpen(false)} className="text-gray-500 hover:text-gray-800">
+                <XIcon className="w-6 h-6" />
+              </button>
+            </div>
+            <form onSubmit={handleUpdate} className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[70vh] overflow-y-auto p-2">
+              <input
+                type="text"
+                name="name"
+                placeholder="Product Name"
+                className="border p-3 rounded-lg w-full"
+                value={editForm.name}
+                onChange={handleEditFormChange}
+              />
+              <input
+                type="text"
+                name="url"
+                placeholder="Product URL"
+                className="border p-3 rounded-lg w-full"
+                value={editForm.url}
+                onChange={handleEditFormChange}
+              />
+              <textarea
+                name="description"
+                placeholder="Product Description"
+                className="border p-3 rounded-lg w-full md:col-span-2"
+                value={editForm.description}
+                onChange={handleEditFormChange}
+                rows={3}
+              />
+              <select
+                name="category"
+                className="border p-3 rounded-lg w-full"
+                value={editForm.category}
+                onChange={handleEditFormChange}
+              >
+                <option value="">Select Category</option>
+                {categories.map((cat) => (
+                  <option key={cat} value={cat}>
+                    {cat}
+                  </option>
+                ))}
+              </select>
+              <select
+                name="path"
+                className="border p-3 rounded-lg w-full"
+                value={editForm.path}
+                onChange={handleEditFormChange}
+              >
+                <option value="">Select Path</option>
+                {paths.map((p) => (
+                  <option key={p} value={p}>
+                    {p}
+                  </option>
+                ))}
+              </select>
+              <div className="md:col-span-2 border p-3 rounded-lg">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Change Product Image (Optional)
+                </label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="block w-full text-sm text-gray-500
+                    file:mr-4 file:py-2 file:px-4
+                    file:rounded-full file:border-0
+                    file:text-sm file:font-semibold
+                    file:bg-blue-50 file:text-blue-700
+                    hover:file:bg-blue-100"
+                  onChange={handleEditFileChange}
+                />
+              </div>
+              {editImagePreview && (
+                <div className="md:col-span-2 flex justify-center">
+                  <img
+                    src={editImagePreview}
+                    alt="Preview"
+                    className="w-32 h-32 object-cover rounded-md border"
+                  />
+                </div>
+              )}
+              <div className="md:col-span-2 flex justify-end gap-3 mt-4">
+                <button
+                  type="button"
+                  onClick={() => setIsEditModalOpen(false)}
+                  className="bg-gray-200 text-gray-800 py-2 px-4 rounded-lg hover:bg-gray-300 transition"
+                  disabled={loading}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition flex items-center justify-center disabled:opacity-50"
+                  disabled={loading}
+                >
+                  {loading ? (
+                    <Loader2Icon className="w-5 h-5 animate-spin" />
+                  ) : (
+                    'Save Changes'
+                  )}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* --- Delete Confirmation Modal --- */}
+      {isDeleteModalOpen && (
+        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-sm m-4">
+            <h3 className="text-xl font-semibold mb-4">Delete Product</h3>
+            <p className="text-gray-600 mb-6">
+              Are you sure you want to delete "
+              <strong>{productToDelete?.name}</strong>"? This action cannot be
+              undone.
+            </p>
+            <div className="flex justify-end gap-3">
+              <button
+                type="button"
+                onClick={() => setIsDeleteModalOpen(false)}
+                className="bg-gray-200 text-gray-800 py-2 px-4 rounded-lg hover:bg-gray-300 transition"
+                disabled={loading}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleDelete}
+                className="bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 transition flex items-center justify-center disabled:opacity-50"
+                disabled={loading}
+              >
+                {loading ? (
+                  <Loader2Icon className="w-5 h-5 animate-spin" />
+                ) : (
+                  'Delete'
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
