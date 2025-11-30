@@ -1,0 +1,108 @@
+.product-sec {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 1.5rem;
+    padding: 1.5rem;
+    width: 100%;
+    max-width: 1400px; 
+    margin: 0 auto; 
+}
+
+@media (min-width: 768px) {
+    .product-sec {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (min-width: 1024px) {
+    .product-sec {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+
+.product-card {
+    height: 26rem;
+    width: 100%; 
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    background: white;
+    border-radius: 8px; 
+    overflow: hidden; 
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.img-div {
+    height: 65%;
+    width: 100%;
+    position: relative; 
+}
+
+.productImage {
+    object-fit: cover;
+    object-position: top;
+}
+
+.product-info {
+    padding: 0.8rem;
+    height: 35%;
+    width: 100%;
+    background: #f4f4f4; 
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.product-title {
+    font-size: 1.1rem; 
+    font-weight: 700;
+    font-family: var(--play-txt);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+}
+
+.product-desc {
+    font-family: var(--inter-txt);
+    font-size: 0.85rem;
+    font-weight: 400;
+    line-height: 1.4;
+    color: #4a4a4a;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.product-btn {
+    width: 100%;
+    text-align: center;
+    padding: 0.5rem;
+    background: var(--text-teal, #008080);
+    color: white;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.2s ease-in-out;
+    text-decoration: none;
+}
+
+.product-btn:hover {
+    background: #005e60;
+    opacity: 0.9;
+}
+
+
+@media (max-width: 768px) {
+    .product-card {
+        height: 22rem;
+    }
+
+    .product-sec{
+        padding: 1rem 0.2em;
+        gap: .2em;
+    }
+}

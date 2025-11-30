@@ -22,28 +22,27 @@ export default function CategoryPage() {
 
   const subPath: SubPathTypes = {
     lineneshirt: [
-      { name: "The Daily Ritual", url: "path1-linen", icon: IoMdAdd },
-      { name: "The Resort Escape", url: "path2-linen", icon: IoMdAdd },
-      { name: "The City Classic", url: "path3-linen", icon: IoMdAdd },
+      { name: "The Daily Ritual", url: "path1", icon: IoMdAdd },
+      { name: "The Resort Escape", url: "path2", icon: IoMdAdd },
+      { name: "The City Classic", url: "path3", icon: IoMdAdd },
     ],
     poloshirt: [
-      { name: "The Everyday Essential", url: "path1-polo", icon: IoMdAdd },
-      { name: "The Weekend Vibe", url: "path2-polo", icon: IoMdAdd },
-      { name: "The Luxe Comfort", url: "path3-polo", icon: IoMdAdd },
+      { name: "The Everyday Essential", url: "path1", icon: IoMdAdd },
+      { name: "The Weekend Vibe", url: "path2", icon: IoMdAdd },
+      { name: "The Luxe Comfort", url: "path3", icon: IoMdAdd },
     ],
     trousers: [
-      { name: "The Tailored Fit", url: "path1-trouser", icon: IoMdAdd },
-      { name: "The Casual Ease", url: "path2-trouser", icon: IoMdAdd },
-      { name: "The Workday Smart", url: "path3-trouser", icon: IoMdAdd },
+      { name: "The Tailored Fit", url: "path1", icon: IoMdAdd },
+      { name: "The Casual Ease", url: "path2", icon: IoMdAdd },
+      { name: "The Workday Smart", url: "path3", icon: IoMdAdd },
     ],
     shoes: [
-      { name: "The Classic Oxford", url: "path1-shoe", icon: IoMdAdd },
-      { name: "The Street Sneaker", url: "path2-shoe", icon: IoMdAdd },
-      { name: "The Everyday Loafer", url: "path3-shoe", icon: IoMdAdd },
+      { name: "The Classic Oxford", url: "path1", icon: IoMdAdd },
+      { name: "The Street Sneaker", url: "path2", icon: IoMdAdd },
+      { name: "The Everyday Loafer", url: "path3", icon: IoMdAdd },
     ],
   }
 
-  // ✅ Safe check before indexing
   if (!category || !(category in subPath)) {
     router.push('/404')
     return null

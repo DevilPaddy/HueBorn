@@ -1,8 +1,6 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 
-// --- Icon Components ---
-// Using inline SVGs to avoid installing lucide-react
 const EditIcon = ({ className }: { className?: string }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -76,7 +74,6 @@ const Loader2Icon = ({ className }: { className?: string }) => (
   </svg>
 );
 
-// --- Main Component ---
 export default function AdminPage() {
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
@@ -86,7 +83,6 @@ export default function AdminPage() {
     type: 'success' | 'error';
   } | null>(null);
 
-  // State for the "Add Product" form
   const [form, setForm] = useState({
     name: '',
     description: '',
@@ -97,7 +93,6 @@ export default function AdminPage() {
   });
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
-  // State for the "Edit Product" modal
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [currentProduct, setCurrentProduct] = useState<any>(null);
   const [editForm, setEditForm] = useState({
@@ -110,14 +105,12 @@ export default function AdminPage() {
   });
   const [editImagePreview, setEditImagePreview] = useState<string | null>(null);
 
-  // State for the "Delete Product" modal
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [productToDelete, setProductToDelete] = useState<any>(null);
 
   const categories = ['lineneshirt', 'poloshirt', 'trousers', 'shoes'];
   const paths = ['path1', 'path2', 'path3'];
 
-  // --- Data Fetching ---
   const fetchProducts = async () => {
     setIsFetching(true);
     try {
@@ -138,7 +131,6 @@ export default function AdminPage() {
     fetchProducts();
   }, []);
 
-  // --- Utility Functions ---
   const showNotification = (message: string, type: 'success' | 'error') => {
     setNotification({ message, type });
     setTimeout(() => {
@@ -158,7 +150,6 @@ export default function AdminPage() {
     setImagePreview(null);
   };
 
-  // --- "Add Product" Handlers ---
   const handleFormChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
@@ -204,7 +195,7 @@ export default function AdminPage() {
       if (res.ok && data.success) {
         showNotification('Product added successfully!', 'success');
         clearForm();
-        fetchProducts(); // Refresh the list
+        fetchProducts(); 
       } else {
         showNotification(data.error || 'Upload failed.', 'error');
       }
@@ -216,7 +207,6 @@ export default function AdminPage() {
     setLoading(false);
   };
 
-  // --- "Edit Product" Handlers ---
   const openEditModal = (product: any) => {
     setCurrentProduct(product);
     setEditForm({
@@ -225,9 +215,9 @@ export default function AdminPage() {
       category: product.category,
       path: product.path,
       url: product.url,
-      image: null, // Reset image field
+      image: null, 
     });
-    setEditImagePreview(product.image); // Show existing image
+    setEditImagePreview(product.image); 
     setIsEditModalOpen(true);
   };
 
@@ -246,7 +236,7 @@ export default function AdminPage() {
     if (file) {
       setEditImagePreview(URL.createObjectURL(file));
     } else {
-      setEditImagePreview(currentProduct?.image || null); // Revert to original if cancelled
+      setEditImagePreview(currentProduct?.image || null); 
     }
   };
 
@@ -256,7 +246,6 @@ export default function AdminPage() {
 
     try {
       const formData = new FormData();
-      // Only append fields that have changed
       if (editForm.name !== currentProduct.name)
         formData.append('name', editForm.name);
       if (editForm.description !== currentProduct.description)
@@ -270,7 +259,6 @@ export default function AdminPage() {
       if (editForm.image)
         formData.append('file', editForm.image);
 
-      // Check if any data is being sent
       if (Array.from(formData.entries()).length === 0) {
         showNotification('No changes detected.', 'success');
         setIsEditModalOpen(false);
@@ -287,7 +275,7 @@ export default function AdminPage() {
       if (res.ok && data.success) {
         showNotification('Product updated successfully!', 'success');
         setIsEditModalOpen(false);
-        fetchProducts(); // Refresh the list
+        fetchProducts(); 
       } else {
         showNotification(data.error || 'Update failed.', 'error');
       }
@@ -299,7 +287,6 @@ export default function AdminPage() {
     setLoading(false);
   };
 
-  // --- "Delete Product" Handlers ---
   const openDeleteModal = (product: any) => {
     setProductToDelete(product);
     setIsDeleteModalOpen(true);
@@ -319,7 +306,7 @@ export default function AdminPage() {
         showNotification('Product deleted successfully!', 'success');
         setIsDeleteModalOpen(false);
         setProductToDelete(null);
-        fetchProducts(); // Refresh the list
+        fetchProducts(); 
       } else {
         showNotification(data.error || 'Delete failed.', 'error');
       }
@@ -332,8 +319,7 @@ export default function AdminPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4 md:p-8 relative">
-      {/* --- Notification Bar --- */}
+    <div className="min-h-screen bg-[#ede8e2] p-4 md:p-8 relative">
       {notification && (
         <div
           className={`fixed top-5 left-1/2 -translate-x-1/2 z-50 rounded-md p-4 text-white ${
@@ -344,7 +330,6 @@ export default function AdminPage() {
         </div>
       )}
 
-      {/* --- Add Product Form --- */}
       <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-6 md:p-8 mb-8">
         <h2 className="text-2xl font-semibold mb-6 text-center">
           🛍️ Add New Product
@@ -354,7 +339,7 @@ export default function AdminPage() {
             type="text"
             name="name"
             placeholder="Product Name"
-            className="border p-3 rounded-lg w-full"
+            className="border-[.8px] border-zinc-400 p-3 rounded-lg w-full"
             value={form.name}
             onChange={handleFormChange}
             required
@@ -363,7 +348,7 @@ export default function AdminPage() {
             type="text"
             name="url"
             placeholder="Product URL"
-            className="border p-3 rounded-lg w-full"
+            className="border-[.8px] border-zinc-400 p-3 rounded-lg w-full"
             value={form.url}
             onChange={handleFormChange}
             required
@@ -371,7 +356,7 @@ export default function AdminPage() {
           <textarea
             name="description"
             placeholder="Product Description"
-            className="border p-3 rounded-lg w-full md:col-span-2"
+            className="border-[.8px] border-zinc-400 p-3 rounded-lg w-full md:col-span-2"
             value={form.description}
             onChange={handleFormChange}
             required
@@ -379,7 +364,7 @@ export default function AdminPage() {
           />
           <select
             name="category"
-            className="border p-3 rounded-lg w-full"
+            className="border-[.8px] border-zinc-400 p-3 rounded-lg w-full"
             value={form.category}
             onChange={handleFormChange}
             required
@@ -393,7 +378,7 @@ export default function AdminPage() {
           </select>
           <select
             name="path"
-            className="border p-3 rounded-lg w-full"
+            className="border-[.8px] border-zinc-400 p-3 rounded-lg w-full"
             value={form.path}
             onChange={handleFormChange}
             required
@@ -405,7 +390,7 @@ export default function AdminPage() {
               </option>
             ))}
           </select>
-          <div className="md:col-span-2 border p-3 rounded-lg">
+          <div className="md:col-span-2 border-[.8px] border-zinc-400 p-3 rounded-lg">
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Product Image
             </label>
@@ -445,7 +430,6 @@ export default function AdminPage() {
         </form>
       </div>
 
-      {/* --- Product List Table --- */}
       <div className="max-w-6xl mx-auto bg-white rounded-lg shadow-md p-6 md:p-8">
         <h3 className="text-2xl font-semibold mb-6 text-center">🧾 Product List</h3>
         {isFetching ? (
@@ -501,7 +485,6 @@ export default function AdminPage() {
         )}
       </div>
 
-      {/* --- Edit Product Modal --- */}
       {isEditModalOpen && (
         <div className="fixed inset-0 z-40 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white rounded-lg shadow-xl p-6 md:p-8 w-full max-w-3xl m-4">
@@ -613,7 +596,6 @@ export default function AdminPage() {
         </div>
       )}
 
-      {/* --- Delete Confirmation Modal --- */}
       {isDeleteModalOpen && (
         <div className="fixed inset-0 z-40 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-sm m-4">

@@ -5,10 +5,22 @@ import cloudinary from "../../../lib/cloudinary";
 
 export const dynamic = "force-dynamic";
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
     await connectDB();
-    const products = await Product.find({}).sort({ createdAt: -1 });
+    const { searchParams } = new URL(req.url);
+    const category = searchParams.get("category");
+    const path = searchParams.get("path");
+    const query: any = {};
+
+    if (category) {
+      query.category = category;
+    }
+    if (path) {
+      query.path = path;
+    }
+    
+    const products = await Product.find(query).sort({ createdAt: -1 });
     return NextResponse.json({ success: true, data: products }, { status: 200 });
   } catch (error) {
     console.error("GET_PRODUCTS_ERROR", error);
@@ -30,7 +42,7 @@ export async function POST(req: NextRequest) {
     const category = formData.get("category") as string;
     const path = formData.get("path") as string;
     const url = formData.get("url") as string;
-    const image = formData.get("file") as File | null; 
+    const image = formData.get("file") as File | null;
 
     if (!name || !description || !category || !path || !url || !image) {
       return NextResponse.json(
@@ -45,7 +57,7 @@ export async function POST(req: NextRequest) {
     const uploadResult: any = await new Promise((resolve, reject) => {
       const stream = cloudinary.uploader.upload_stream(
         {
-          folder: "hueborn/products", 
+          folder: "hueborn/products",
           resource_type: "image",
         },
         (error, result) => {
@@ -75,9 +87,9 @@ export async function POST(req: NextRequest) {
     );
   } catch (error) {
     console.error("UPLOAD_PRODUCT_ERROR", error);
-    
+
     const errorMessage = error instanceof Error ? error.message : "Upload failed";
-    
+
     return NextResponse.json(
       { success: false, error: errorMessage },
       { status: 500 }
