@@ -56,20 +56,17 @@ const Navbar = () => {
 
   return (
     <>
-      {/* 🧭 Navbar */}
+      {/* Navbar */}
       <nav className="nav w-full h-16 bg-[#ede8e2]
           flex justify-between items-center
-          px-6 md:px-12 
-          shadow-[0_4px_30px_rgba(0,0,0,0.1)] 
-          backdrop-blur-[2.5px]
-          border border-[rgba(186,182,178,0.3)]">
+          px-6 md:px-12">
         <Link href='/'>
           <div className="logo">
             <img src="/hue-born-logo.svg" alt="logo" />
           </div>
         </Link>
 
-        {/* 🖥 Desktop Menu */}
+        {/*  Desktop Menu */}
         <ul className="hidden md:flex nav-menu justify-between items-center gap-[2vw] font-medium">
           {navLinks.map((link) => (
             <DesktopNavLink key={link.name} href={link.href}>
@@ -78,7 +75,7 @@ const Navbar = () => {
           ))}
         </ul>
 
-        {/* 📱 Mobile Hamburger */}
+        {/*  Mobile Hamburger */}
         <div className="hamburger md:hidden">
           <button onClick={() => setIsMobileMenuOpen(true)} aria-label="Open navigation menu">
             <RxHamburgerMenu size="30" color={'#6a7077'} />
@@ -86,7 +83,7 @@ const Navbar = () => {
         </div>
       </nav>
 
-      {/* 📱 Mobile Menu */}
+      {/*  Mobile Menu */}
       <div
         className={`
           fixed top-0 right-0 h-full w-full max-w-md 
