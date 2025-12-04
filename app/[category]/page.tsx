@@ -21,7 +21,7 @@ export default function CategoryPage() {
   const category = Array.isArray(categoryParam) ? categoryParam[0] : categoryParam
 
   const subPath: SubPathTypes = {
-    lineneshirt: [
+    linenshirt: [
       { name: "The Daily Ritual", url: "path1", icon: IoMdAdd },
       { name: "The Resort Escape", url: "path2", icon: IoMdAdd },
       { name: "The City Classic", url: "path3", icon: IoMdAdd },

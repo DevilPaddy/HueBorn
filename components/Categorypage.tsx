@@ -16,10 +16,9 @@ const page = () => {
                     <p className='sub-txt'>Timeless Style Awaits</p>
                 </div>
 
-                {/* categories card */}
                 <div className="card-container w-full h-auto">
                     <Link
-                        href='/lineneshirt'
+                        href='/linenshirt'
                         className="card bg-[#868686]">
                         <div className='flex h-[87%] items-center justify-center'>
                             <h2 className='card-txt text-[#38393A]'>Linen Shirt</h2>
