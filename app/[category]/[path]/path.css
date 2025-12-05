@@ -42,7 +42,6 @@
 
 .productImage {
     object-fit: cover;
-    object-position: top;
 }
 
 .product-info {

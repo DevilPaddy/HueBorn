@@ -1,9 +1,4 @@
-import { NextResponse } from 'next/server';
-import mongoose from 'mongoose';
-import Product from '../../../models/products';
-
-
-const products = [
+[
     {
         "name": "The Slim Fit Travel Chino",
         "description": "Built for the modern hustle. Features 4-way stretch fabric that moves with you, wrinkle-resistance for all-day crispness.",
@@ -473,22 +468,3 @@ const products = [
         "path": "path3"
     }
 ];
-
-export async function POST() {
-    try {
-        if (mongoose.connection.readyState === 0) {
-            await mongoose.connect(process.env.MONGOBD_URL!);
-        }
-
-        await Product.insertMany(products);
-
-        return NextResponse.json({
-            message: "Success! All products added to DB.",
-            count: products.length
-        }, { status: 201 });
-
-    } catch (error) {
-        console.error("Seeding Error:", error);
-        return NextResponse.json({ message: "Error seeding data", error }, { status: 500 });
-    }
-}
