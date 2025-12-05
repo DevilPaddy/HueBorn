@@ -359,8 +359,8 @@ const products = [
         "name": "Men's Natural Cotton Linen Band Collar Regular Fit Shirt",
         "description": "Lightweight, 4.0/5 for summer comfort. Linen blend in pastel yellow specifically designed for summer season with light fabric and excellent cooling properties. Regular fit construction perfect for hot weather. Priced at ₹3,290.",
         "category": "linenshirt",
-        "url": "https://cottonworld.net/collections/men-linen-shirts/products/m-shirts-16731-21089-natural",
-        "image": "https://cottonworld.net/cdn/shop/files/M-SHIRTS-50006-21196-BRICK_1.jpg?v=1752656293&width=1280",
+        "url": "https://cottonworld.net/products/m-pants-17472-21023-navy",
+        "image": "https://cottonworld.net/cdn/shop/files/M-PANTS-17472-21023-NAVY_8.jpg?v=1756980271&width=1280",
         "cloudinaryId": "placeholder_ls_23",
         "path": "path2"
     },
@@ -368,8 +368,8 @@ const products = [
         "name": "Cosmic Latte Linen Shirt",
         "description": "'Best shirt ever,' 4.6/5 premium feel. Premium Belgian Flax linen with mandarin collar featuring exceptional quality and craftsmanship. Made from biodegradable sustainable fiber with 'Rajan' signature detailing. Priced at ₹4,990.",
         "category": "linenshirt",
-        "url": "https://cottonworld.net/cdn/shop/files/M-SHIRTS-50006-21196-BRICK_1.jpg?v=1752656293&width=1280",
-        "image": "https://www.andamen.com/cdn/shop/products/slategrey-mandarin-flax.jpg",
+        "url": "https://www.primalgray.com/collections/men-formal-shirts/products/pleated-shirt-coral?variant=41280094372049",
+        "image": "https://www.primalgray.com/cdn/shop/files/PG2-0887_594x.progressive.jpg?v=1739941211",
         "cloudinaryId": "placeholder_ls_24",
         "path": "path3"
     },

@@ -1,6 +1,7 @@
 'use client'
 import React from 'react'
 import Link from "next/link";
+import Image from 'next/image';
 
 const page = () => {
 
@@ -10,10 +11,10 @@ const page = () => {
       {/* hero section */}
       <div className='conatiner md:relative h-auto md:h-screen w-full
        md:px-0 md:py-0 px-[1.3vh] py-[.2vh] mb-10 md:mb-0'>
-        <img
+        <Image width={0} height={0} sizes='100vh'
           className='hero-img w-full md:h-full h-[46vh] md:z-[-2] 
           object-cover object-[right_36%] rounded-[33px] md:rounded-none'
-          src="/hue-hero.png" alt="hero section image" />
+          src="https://res.cloudinary.com/dwx3h8yid/image/upload/v1764920771/uiestdwwcsleuxphd0ma.png" alt="hero section image" />
 
         <div className="over md:absolute md:top-0 md:left-0 w-full 
           md:h-full z-10 md:bg-[#11111154] 
