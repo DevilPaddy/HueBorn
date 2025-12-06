@@ -18,10 +18,8 @@ export default async function LoginPage() {
           Sign in to your account
         </h2>
 
-        {/* Email/password login */}
         <LoginForm />
 
-        {/* Divider */}
         <div className="relative">
           <div className="absolute inset-0 flex items-center">
             <div className="w-full border-t border-gray-300" />
@@ -31,10 +29,8 @@ export default async function LoginPage() {
           </div>
         </div>
 
-        {/* Google Login Button */}
         <GoogleLoginButton />
 
-        {/* Signup link */}
         <p className="text-sm text-center text-gray-600">
           Don't have an account?{" "}
           <Link

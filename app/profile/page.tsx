@@ -5,6 +5,8 @@ import { useSession, signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { FaUserCircle } from 'react-icons/fa'
 import Link from 'next/link'
+import toast from "react-hot-toast";
+
 
 const ProfilePage = () => {
   const { data: session, status } = useSession()
@@ -18,7 +20,6 @@ const ProfilePage = () => {
     if (status === 'authenticated') {
       const fetchData = async () => {
         try {
-          // ✅ 1. Fetch wishlist safely
           const resWishlist = await fetch('/api/profile/wishlist')
           if (resWishlist.ok) {
             const data = await resWishlist.json().catch(() => ({}))
@@ -27,13 +28,11 @@ const ProfilePage = () => {
             console.warn('Wishlist fetch failed:', resWishlist.status)
           }
 
-          // ✅ 2. Fetch admin status safely
           const resAdmin = await fetch('/api/isadmin')
           if (resAdmin.ok) {
             const data = await resAdmin.json().catch(() => ({}))
             setIsAdmin(data.isAdmin)
           } else {
-            // Non-200 status still okay — user might not be admin
             setIsAdmin(false)
           }
         } catch (error) {
@@ -68,7 +67,10 @@ const ProfilePage = () => {
         )}
 
         <button
-          onClick={() => signOut()}
+          onClick={() => {
+            toast.success("See you later!");
+            signOut({ callbackUrl: "/login" });
+          }}
           className="bg-red-500 text-white px-4 py-2 rounded-md mt-2 hover:bg-red-600 transition block w-full"
         >
           Logout

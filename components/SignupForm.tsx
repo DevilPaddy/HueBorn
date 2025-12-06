@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { FcGoogle } from 'react-icons/fc'
+import toast from "react-hot-toast";
 
 export default function SignupForm() {
   const router = useRouter()
@@ -29,11 +30,13 @@ export default function SignupForm() {
 
       if (!response.ok) {
         setError(data.error || 'Something went wrong')
+        toast.error(data.message || "Registration failed");
         setIsLoading(false)
         return
       }
 
-      // Auto-login after signup
+      toast.success("Account created! Logging you in...");
+
       const result = await signIn('credentials', {
         redirect: false,
         email,
@@ -44,7 +47,8 @@ export default function SignupForm() {
         setError('Failed to log in after signup. Please go to login page.')
         setIsLoading(false)
       } else if (result?.ok) {
-        router.push('/profile')
+        router.push('/')
+        router.refresh();
       }
     } catch (err) {
       setError('An error occurred. Please try again.')
@@ -53,7 +57,6 @@ export default function SignupForm() {
     }
   }
 
-  // ✅ Google Sign In handler
   const handleGoogleSignup = async () => {
     await signIn('google', { callbackUrl: '/profile' })
   }

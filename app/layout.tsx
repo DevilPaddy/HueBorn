@@ -2,6 +2,7 @@ import "./globals.css";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Providers from "./providers";
+import { Toaster } from "react-hot-toast";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -33,6 +34,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Navbar />
           </div>
           <main className="mx-auto pt-16 min-h-screen">
+            <Toaster position="top-center"
+              toastOptions={{
+                style: { zIndex: 9999 },
+              }}
+            />
             {children}
           </main>
           <Footer />

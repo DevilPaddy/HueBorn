@@ -7,13 +7,11 @@ import User from "../../../../models/user";
 
 export const authOptions: NextAuthOptions = {
   providers: [
-    // 🟢 Google OAuth
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID as string,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
     }),
 
-    // 🟠 Email + Password Login
     CredentialsProvider({
       name: "Credentials",
       credentials: {
@@ -25,6 +23,7 @@ export const authOptions: NextAuthOptions = {
 
         await connectDB();
         const user = await User.findOne({ email: credentials.email });
+        
         if (!user || !user.password) return null;
 
         const isPasswordValid = await bcrypt.compare(credentials.password, user.password);
@@ -34,7 +33,7 @@ export const authOptions: NextAuthOptions = {
           id: user._id.toString(),
           name: user.name,
           email: user.email,
-          image: user.image,
+          image: user.image, 
         };
       },
     }),
@@ -43,12 +42,46 @@ export const authOptions: NextAuthOptions = {
   session: { strategy: "jwt" },
 
   callbacks: {
+    async signIn({ user, account }) {
+      if (account?.provider === "google") {
+        try {
+          await connectDB();
+          const existingUser = await User.findOne({ email: user.email });
+
+          if (!existingUser) {
+            await User.create({
+              name: user.name,
+              email: user.email,
+              isAdmin: false, 
+            });
+          }
+          return true; 
+        } catch (error) {
+          console.error("Error saving user to DB", error);
+          return false; 
+        }
+      }
+      return true; 
+    },
+
+    // 🟠 2. JWT CALLBACK
     async jwt({ token, user }) {
-      if (user) token.id = user.id;
+      if (user) {
+         await connectDB();
+         const dbUser = await User.findOne({ email: user.email });
+         if(dbUser) {
+            token.id = dbUser._id.toString();
+            token.isAdmin = dbUser.isAdmin; 
+         }
+      }
       return token;
     },
+
     async session({ session, token }) {
-      if (session.user) (session.user as any).id = token.id;
+      if (session.user) {
+        (session.user as any).id = token.id;
+        (session.user as any).isAdmin = token.isAdmin;
+      }
       return session;
     },
   },
