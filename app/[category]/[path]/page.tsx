@@ -5,6 +5,7 @@ import './path.css';
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import HeartBtn from '../../../components/HeartBtn'
 
 interface ProductType {
   _id: string;
@@ -81,19 +82,28 @@ const Page = () => {
         </div>
         <div className="product-sec">
           {products.map((product) => (
-            <div className="product-card" key={product._id}>
-              <div className="img-div">
+            <div className="product-card relative group" key={product._id}>
+              
+              <HeartBtn product={{
+                  _id: product._id,
+                  name: product.name,
+                  image: product.image,
+                  url: product.url 
+              }} />
+
+              <div className="img-div relative">
                 <Image
                   src={product.image}
                   alt={product.name}
                   sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
                   fill={true}
-                  className='productImage'
+                  className='productImage object-cover' 
                 />
               </div>
               <div className="product-info">
                 <h1 className='product-title'>{product.name}</h1>
-                <p className="product-desc">{product.description}</p>
+                <p className="product-desc line-clamp-2">{product.description}</p>
+                
                 <Link className='product-btn' href={product.url} target="_blank">
                     Explore at Brand
                 </Link>
