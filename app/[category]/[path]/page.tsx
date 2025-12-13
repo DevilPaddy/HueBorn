@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import './path.css';
+import ProductLoader from '../../../components/Loaders/ProductLoader'
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -64,7 +65,9 @@ const Page = () => {
     fetchProducts();
   }, [category, path]); 
 
-  if (loading) return <div className="text-center mt-20">Loading...</div>;
+  if (loading) return <div className="flex items-center justify-center mt-20">
+    <ProductLoader />
+  </div>;
   
   if (error) return <div className="text-center mt-20 text-red-500">Error: {error}</div>;
 
@@ -91,21 +94,19 @@ const Page = () => {
                   url: product.url 
               }} />
 
-              <div className="img-div relative">
+              <div className="img-div aspect-3/4 relative">
                 <Image
                   src={product.image}
                   alt={product.name}
                   sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
                   fill={true}
-                  className='productImage object-cover' 
+                  className='productImage object-contain' 
                 />
               </div>
               <div className="product-info">
-                <h1 className='product-title'>{product.name}</h1>
-                <p className="product-desc line-clamp-2">{product.description}</p>
-                
+                <h1 className='product-title font-bold'>{product.name}</h1>                
                 <Link className='product-btn' href={product.url} target="_blank">
-                    Explore at Brand
+                    Explore
                 </Link>
               </div>
             </div>

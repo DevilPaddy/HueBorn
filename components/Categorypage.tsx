@@ -1,9 +1,7 @@
 'use client'
-import React from 'react'
-import { IoIosArrowRoundBack } from "react-icons/io";
-
 
 import Link from 'next/link'
+import Image from 'next/image';
 
 const page = () => {
     return (
@@ -17,50 +15,58 @@ const page = () => {
                 </div>
 
                 <div className="card-container w-full h-auto">
+
                     <Link
-                        href='/linenshirt'
-                        className="card bg-[#868686]">
-                        <div className='flex h-[87%] items-center justify-center'>
-                            <h2 className='card-txt text-[#38393A]'>Linen Shirt</h2>
-                        </div>
-                        <div className='p-4'>
-                            <p className='card-link'
-                            >Explore Line Shirt</p>
+                        href="/linenshirt"
+                        className="relative group block w-full h-[420px] overflow-hidden rounded-lg"
+                    >
+                        <Image
+                            src="https://res.cloudinary.com/dmkniypxd/image/upload/v1765615537/portrait-handsome-bearded-man-outside_avc9co.jpg"
+                            alt="Linen Shirt"
+                            fill
+                            className="object-cover"
+                            sizes="(max-width: 768px) 100vw, 50vw"
+                        />
+                        <div className="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition-colors duration-300" />
+                        <div className="relative z-10 h-full flex flex-col justify-between p-6">
+                            <div className="flex items-center justify-center h-full">
+                                <h2 className="text-white text-2xl md:text-3xl font-semibold tracking-wide">
+                                    Linen Shirt
+                                </h2>
+                            </div>
+
+                            <p className="text-white text-sm underline text-center">
+                                Explore Linen Shirt
+                            </p>
                         </div>
                     </Link>
 
-                    <Link href='/poloshirt' className="card bg-[#00393A]">
-                        <div className='flex h-[87%] items-center justify-center'>
-                            <h2 className='card-txt text-[#949494]'>Polo Shirt</h2>
-                        </div>
-                        <div className='p-4'>
-                            <p
-                                className='card-link'
-                            >Explore Polo Shirt</p>
+
+                    <Link
+                        href="/linenshirt"
+                        className="relative group block w-full h-[420px] overflow-hidden rounded-lg"
+                    >
+                        <Image
+                            src="https://res.cloudinary.com/dmkniypxd/image/upload/v1765615442/low-section-man-standing-rock-against-blue-sky_e2tc7f.jpg"
+                            alt="Linen Shirt"
+                            fill
+                            className="object-cover"
+                            sizes="(max-width: 768px) 100vw, 50vw"
+                        />
+                        <div className="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition-colors duration-300" />
+                        <div className="relative z-10 h-full flex flex-col justify-between p-6">
+                            <div className="flex items-center justify-center h-full">
+                                <h2 className="text-white text-2xl md:text-3xl font-semibold tracking-wide">
+                                    Trousers
+                                </h2>
+                            </div>
+
+                            <p className="text-white text-sm underline text-center">
+                                Explore Trousers
+                            </p>
                         </div>
                     </Link>
 
-                    <Link href='/trousers' className="card bg-[#6B6B6B]">
-                        <div className='flex h-[87%] items-center justify-center'>
-                            <h2 className='card-txt text-[#38393A]'>Trousers</h2>
-                        </div>
-                        <div className='p-4'>
-                            <p
-                                className='card-link'
-                            >Explore Trousers</p>
-                        </div>
-                    </Link>
-
-                    <Link href='/shoes' className="card bg-[#1F1F1F]">
-                        <div className='flex h-[87%] items-center justify-center'>
-                            <h2 className='card-txt text-[#949494]'>Shoes</h2>
-                        </div>
-                        <div className='p-4'>
-                            <p
-                                className='card-link'
-                            >Explore Shoes</p>
-                        </div>
-                    </Link>
                 </div>
             </div>
         </div>

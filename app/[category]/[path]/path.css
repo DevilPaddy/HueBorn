@@ -35,7 +35,7 @@
 }
 
 .img-div {
-    height: 65%;
+    height: 70%;
     width: 100%;
     position: relative; 
 }
@@ -46,7 +46,7 @@
 
 .product-info {
     padding: 0.8rem;
-    height: 35%;
+    height: 30%;
     width: 100%;
     background: #f4f4f4; 
     display: flex;
@@ -55,12 +55,9 @@
 }
 
 .product-title {
-    font-size: 1.1rem; 
-    font-weight: 700;
+    font-size: 1em; 
     font-family: var(--play-txt);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    white-space: wrap;
     width: 100%;
 }
 
@@ -96,12 +93,16 @@
 
 
 @media (max-width: 768px) {
+    .product-title{
+        font-size: .66em;
+        line-height: 14px;
+    }
     .product-card {
         height: 22rem;
     }
 
     .product-sec{
-        padding: 1rem 0.2em;
-        gap: .2em;
+        padding: 1rem 0.6em;
+        gap: .6em;
     }
 }

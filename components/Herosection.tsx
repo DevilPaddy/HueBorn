@@ -8,7 +8,6 @@ const page = () => {
 
   return (
     <div>
-      {/* hero section */}
       <div className='conatiner md:relative h-auto md:h-screen w-full
        md:px-0 md:py-0 px-[1.3vh] py-[.2vh] mb-10 md:mb-0'>
         <Image width={0} height={0} sizes='100vh'

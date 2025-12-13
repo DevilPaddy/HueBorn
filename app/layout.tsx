@@ -1,4 +1,5 @@
 import "./globals.css";
+import LoaderWrapper from "../components/Loaders/LoaderWrapper";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Providers from "./providers";
@@ -30,18 +31,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <Providers>
         <body>
-          <div className='fixed w-full top-0 left-0 z-50'>
-            <Navbar />
-          </div>
-          <main className="mx-auto pt-16 min-h-screen">
-            <Toaster position="top-center"
-              toastOptions={{
-                style: { zIndex: 9999 },
-              }}
-            />
-            {children}
-          </main>
-          <Footer />
+          <LoaderWrapper >
+            <div className='fixed w-full top-0 left-0 z-30'>
+              <Navbar />
+            </div>
+            <main className="mx-auto pt-16 min-h-screen">
+              <Toaster position="top-center"
+                toastOptions={{
+                  style: { zIndex: 9999 },
+                }}
+              />
+              {children}
+            </main>
+            <Footer />
+          </LoaderWrapper>
         </body>
       </Providers>
     </html>

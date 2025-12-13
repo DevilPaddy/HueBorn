@@ -58,9 +58,10 @@ export default function Home() {
       <HeroSection />
 
       <div className="break"></div>
-      <Philosophysection />
-      <div className="break"></div>
       <CategorySection />
+
+      <div className="break"></div>
+      <Philosophysection />
     </>
   );
 }

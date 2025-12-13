@@ -26,20 +26,10 @@ export default function CategoryPage() {
       { name: "The Resort Escape", url: "path2", icon: IoMdAdd },
       { name: "The City Classic", url: "path3", icon: IoMdAdd },
     ],
-    poloshirt: [
-      { name: "The Everyday Essential", url: "path1", icon: IoMdAdd },
-      { name: "The Weekend Vibe", url: "path2", icon: IoMdAdd },
-      { name: "The Luxe Comfort", url: "path3", icon: IoMdAdd },
-    ],
     trousers: [
       { name: "The Tailored Fit", url: "path1", icon: IoMdAdd },
       { name: "The Casual Ease", url: "path2", icon: IoMdAdd },
       { name: "The Workday Smart", url: "path3", icon: IoMdAdd },
-    ],
-    shoes: [
-      { name: "The Classic Oxford", url: "path1", icon: IoMdAdd },
-      { name: "The Street Sneaker", url: "path2", icon: IoMdAdd },
-      { name: "The Everyday Loafer", url: "path3", icon: IoMdAdd },
     ],
   }
 
@@ -63,9 +53,6 @@ export default function CategoryPage() {
         <div className="card-container">
           {path.map(({ name, url, icon: Icon }) => (
             <div key={url} className="card-path-sec">
-              <div className="card-icon p-3 rounded-full border-2 border-[#EDE8E2] bg-[#005F60] flex items-center justify-center">
-                <Icon color='#EDE8E2' size='32' />
-              </div>
               <div className="card-title">
                 <h3 className='text-[#ede8e2] leading-11'>{name}</h3>
               </div>
